@@ -27,14 +27,13 @@ if ingredients_list:
         ingredients_string += fruit_chosen + ' '
         
 
-    my_insert_stmt = f"""
-        INSERT INTO smoothies (ingredients, name_on_order)
-        VALUES ('{ingredients_string}', '{name_on_order}')
-    """
+    my_insert_stmt = session.sql(
+            "INSERT INTO smoothies (ingredients, name_on_order) VALUES (?, ?)"
+        ).bind(ingredients_string, name_on_order)
 
 
     time_to_insert = st.button('Submit Order')
 
     if time_to_insert:
-        session.sql(my_insert_stmt).collect()
+        my_insert_stmt.collect()
         st.success(f'Your Smoothie is ordered, {name_on_order}!', icon="✅")
